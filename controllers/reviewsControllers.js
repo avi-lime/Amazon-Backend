@@ -26,7 +26,7 @@ const getAllReviews = async (req, res) => {
     }
 }
 
-// Get All Orders of a user.
+// Get All Reviews of a user.
 
 const getReviewsByUserId = async (req, res) => {
     try {
@@ -56,7 +56,7 @@ const getReviewsByUserId = async (req, res) => {
     }
 }
 
-// Get All Orders of a user.
+// Get All Reviews of a Product.
 
 const getReviewsByProductId = async (req, res) => {
     try {
