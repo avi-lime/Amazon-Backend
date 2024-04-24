@@ -14,6 +14,15 @@ const getAllProducts = async (req, res) => {
     const products = await query;
     const totalResults = await productModel.countDocuments()
 
+    if (totalResults === 0) {
+        return res.status(404)
+            .json({
+                status: "failed",
+                message: "No products in database"
+            })
+    }
+
+
     res.status(200)
         .json({
             status: 'success',
@@ -31,7 +40,13 @@ const getOneProduct = async (req, res) => {
     try {
         const reqId = req.params.id
         const product = await productModel.findOne({ _id: reqId })
-
+        if (product == null) {
+            return res.status(404)
+                .json({
+                    status: "failed",
+                    message: "No product found"
+                })
+        }
         res.status(200)
             .json({
                 status: "success",

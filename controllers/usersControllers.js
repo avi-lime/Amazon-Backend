@@ -3,6 +3,14 @@ const userModel = require('../models/usersModel.js')
 const getAllUsers = async (req, res) => {
     try {
         const users = await userModel.find();
+        if (users.length === 0) {
+            return res.status(404)
+                .json({
+                    status: "failed",
+                    message: "No users."
+                })
+        }
+
         res.status(200)
             .json({
                 status: "success",
@@ -23,6 +31,13 @@ const getOneUser = async (req, res) => {
     try {
         const reqId = req.params.id
         const user = await userModel.findOne({ _id: reqId });
+        if (user == null) {
+            return res.status(404)
+                .json({
+                    status: "failed",
+                    message: "No user found"
+                })
+        }
         res.status(200)
             .json({
                 status: "success",

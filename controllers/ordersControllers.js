@@ -4,6 +4,44 @@ const getAllOrders = async (req, res) => {
     try {
 
         const orders = await orderModel.find();
+        if (orders.length === 0) {
+            return res.status(404)
+                .json({
+                    status: "failed",
+                    message: "No orders"
+                })
+        }
+
+        res.status(200)
+            .json({
+                status: "success",
+                results: orders.length,
+                data: orders
+            })
+
+    } catch (err) {
+        res.status(400)
+            .json({
+                status: "failed",
+                message: err.message
+            })
+    }
+}
+
+// Get All Orders of a user.
+
+const getOrdersByUserId = async (req, res) => {
+    try {
+
+        const orders = await orderModel.find({ userId: req.params.userId });
+        if (orders.length === 0) {
+            return res.status(404)
+                .json({
+                    status: "failed",
+                    message: "No orders found for this user"
+                })
+        }
+
         res.status(200)
             .json({
                 status: "success",
@@ -24,6 +62,13 @@ const getOneOrder = async (req, res) => {
     try {
         const reqId = req.params.id
         const order = await orderModel.findOne({ _id: reqId });
+        if (order == null) {
+            return res.status(404)
+                .json({
+                    status: "failed",
+                    message: "No order found"
+                })
+        }
         res.status(200)
             .json({
                 status: "success",

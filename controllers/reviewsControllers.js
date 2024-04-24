@@ -3,6 +3,73 @@ const reviewModel = require('../models/reviewsModel.js')
 const getAllReviews = async (req, res) => {
     try {
         const reviews = await reviewModel.find();
+        if (reviews.length === 0) {
+            return res.status(404)
+                .json({
+                    status: "failed",
+                    message: "No reviews"
+                })
+        }
+        res.status(200)
+            .json({
+                status: "success",
+                results: reviews.length,
+                data: reviews
+            })
+
+    } catch (err) {
+        res.status(400)
+            .json({
+                status: "failed",
+                message: err.message
+            })
+    }
+}
+
+// Get All Orders of a user.
+
+const getReviewsByUserId = async (req, res) => {
+    try {
+
+        const reviews = await reviewModel.find({ userId: req.params.userId });
+        if (reviews.length === 0) {
+            return res.status(404)
+                .json({
+                    status: "failed",
+                    message: "No reviews found for this user"
+                })
+        }
+
+        res.status(200)
+            .json({
+                status: "success",
+                results: reviews.length,
+                data: reviews
+            })
+
+    } catch (err) {
+        res.status(400)
+            .json({
+                status: "failed",
+                message: err.message
+            })
+    }
+}
+
+// Get All Orders of a user.
+
+const getReviewsByProductId = async (req, res) => {
+    try {
+
+        const reviews = await reviewModel.find({ userId: req.params.productId });
+        if (reviews.length === 0) {
+            return res.status(404)
+                .json({
+                    status: "failed",
+                    message: "No reviews found for this product"
+                })
+        }
+
         res.status(200)
             .json({
                 status: "success",
@@ -23,6 +90,13 @@ const getOneReview = async (req, res) => {
     try {
         const reqId = req.params.id
         const review = await reviewModel.findOne({ _id: reqId });
+        if (review == null) {
+            return res.status(404)
+                .json({
+                    status: "failed",
+                    message: "No review found"
+                })
+        }
         res.status(200)
             .json({
                 status: "success",
